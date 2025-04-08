@@ -1,0 +1,554 @@
+/* Main container */
+.login-container {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #ec4899, #a855f7, #6366f1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-family: sans-serif;
+  }
+  
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
+  }
+  
+  /* Animated background elements */
+  .bg-elements {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  
+  .blob {
+    position: absolute;
+    border-radius: 100%;
+    opacity: 0.2;
+    filter: blur 24px;
+  }
+  
+  .blob:nth-child(1) {
+    top: -4rem;
+    left: -4rem;
+    width: 16rem;
+    height: 16rem;
+    background-color: #f472b6;
+    animation: blob 7s infinite alternate;
+  }
+  
+  .blob:nth-child(2) {
+    top: 33%;
+    right: -4rem;
+    width: 18rem;
+    height: 18rem;
+    background-color: #c084fc;
+    animation: blob 7s infinite alternate;
+    animation-delay: 2s;
+  }
+  
+  .blob:nth-child(3) {
+    bottom: -8rem;
+    left: 25%;
+    width: 20rem;
+    height: 20rem;
+    background-color: #818cf8;
+    animation: blob 7s infinite alternate;
+    animation-delay: 4s;
+  }
+  
+  /* Card container */
+  .login-card {
+    width: 100%;
+    max-width: 28rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    transition: all 0.7s;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .login-card.success {
+    transform: scale(1.05) rotate(1deg);
+  }
+  
+  /* Success animation overlay */
+  .success-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, #4ade80, #10b981);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: 1.5rem;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .success-content {
+    text-align: center;
+    color: white;
+  }
+  
+  .success-check-container {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 100%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    animation: successCheck 0.5s ease-out;
+  }
+  
+  .success-check {
+    color: #10b981;
+  }
+  
+  .success-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+  }
+  
+  .success-message {
+    margin-top: 0.75rem;
+    font-size: 1.125rem;
+    color: #dcfce7;
+  }
+  
+  .success-indicator {
+    margin-top: 1rem;
+    width: 4rem;
+    height: 0.25rem;
+    background-color: white;
+    border-radius: 9999px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.6;
+    animation: pulse 2s infinite;
+  }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(to right, #ec4899, #d946ef, #a855f7);
+    padding: 3.5rem 2rem 2.5rem;
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .header-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .header-blob-1 {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 100%;
+    background-color: white;
+    opacity: 0.1;
+    filter: blur 12px;
+  }
+  
+  .header-blob-2 {
+    position: absolute;
+    bottom: 25%;
+    right: 25%;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 100%;
+    background-color: #f9a8d4;
+    opacity: 0.2;
+    filter: blur 12px;
+  }
+  
+  .logo-container {
+    width: 5rem;
+    height: 5rem;
+    background-color: white;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .logo-icon {
+    color: #ec4899;
+  }
+  
+  .header-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+  }
+  
+  .header-subtitle {
+    color: #fce7f3;
+    margin-top: 0.75rem;
+    font-size: 1.125rem;
+  }
+  
+  .header-wave {
+    position: absolute;
+    bottom: -1.5rem;
+    left: 0;
+    width: 100%;
+    height: 3rem;
+  }
+  
+  /* Form content */
+  .form-container {
+    padding: 2rem;
+    padding-top: 2.5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  
+  /* Phone step */
+  .form-group {
+    margin-bottom: 1.75rem;
+  }
+  
+  .input-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    display: block;
+    margin-bottom: 0.5rem;
+    margin-left: 0.25rem;
+  }
+  
+  .input-container {
+    display: flex;
+    align-items: center;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 0.875rem 1rem;
+    transition: all 0.3s;
+  }
+  
+  .input-container:focus-within {
+    border-color: #ec4899;
+    box-shadow: 0 4px 6px -1px rgba(236, 72, 153, 0.1);
+  }
+  
+  .input-container.error {
+    border-color: #ef4444;
+    background-color: #fee2e2;
+  }
+  
+  .input-icon {
+    margin-right: 0.75rem;
+    color: #9ca3af;
+  }
+  
+  .input-icon.error {
+    color: #f87171;
+  }
+  
+  .input-field {
+    flex: 1;
+    outline: none;
+    color: #374151;
+    background-color: transparent;
+    font-size: 1.125rem;
+  }
+  
+  .input-field::placeholder {
+    color: #9ca3af;
+  }
+  
+  .input-field.error::placeholder {
+    color: #fca5a5;
+  }
+  
+  .error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    margin-left: 0.25rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .error-icon {
+    margin-right: 0.25rem;
+  }
+  
+  /* Submit button */
+  .submit-button {
+    width: 100%;
+    background: linear-gradient(to right, #ec4899, #a855f7);
+    color: white;
+    padding: 0.875rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+    font-size: 1.125rem;
+  }
+  
+  .submit-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .submit-button:disabled {
+    opacity: 0.7;
+  }
+  
+  .button-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .spinner {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 0.75rem;
+  }
+  
+  /* OTP verify button */
+  .verify-button {
+    background: linear-gradient(to right, #a855f7, #6366f1);
+  }
+  
+  /* Signup link */
+  .signup-container {
+    text-align: center;
+    padding-top: 1rem;
+  }
+  
+  .signup-text {
+    color: #4b5563;
+  }
+  
+  .signup-link {
+    color: #ec4899;
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: #fbcfe8;
+    text-decoration-thickness: 2px;
+    transition: all 0.3s;
+  }
+  
+  .signup-link:hover {
+    color: #db2777;
+    text-decoration-color: #f9a8d4;
+  }
+  
+  /* OTP Step */
+  .back-button {
+    display: flex;
+    align-items: center;
+    color: #6b7280;
+    transition: all 0.3s;
+    margin-bottom: 0.5rem;
+  }
+  
+  .back-button:hover {
+    color: #ec4899;
+  }
+  
+  .back-icon {
+    margin-right: 0.25rem;
+    transition: transform 0.3s;
+  }
+  
+  .back-button:hover .back-icon {
+    transform: translateX(-4px);
+  }
+  
+  .otp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  
+  .otp-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .otp-phone-badge {
+    font-size: 0.75rem;
+    background-color: #fdf2f8;
+    color: #db2777;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+  }
+  
+  .otp-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f3ff;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .otp-info-icon {
+    color: #a78bfa;
+    margin-right: 0.5rem;
+  }
+  
+  .otp-info-text {
+    font-size: 0.875rem;
+    color: #7c3aed;
+  }
+  
+  .otp-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  
+  .otp-input {
+    width: 4rem;
+    height: 4rem;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.3s;
+  }
+  
+  .otp-input:focus {
+    border-color: #a855f7;
+    box-shadow: 0 4px 6px -1px rgba(168, 85, 247, 0.1);
+  }
+  
+  .otp-input.filled {
+    border-color: #4ade80;
+    background-color: #f0fdf4;
+  }
+  
+  .otp-input.error {
+    border-color: #ef4444;
+    background-color: #fee2e2;
+  }
+  
+  .resend-button {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s;
+    color: #7c3aed;
+  }
+  
+  .resend-button:not(:disabled):hover {
+    background-color: #f5f3ff;
+    font-weight: 500;
+  }
+  
+  .resend-button:disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+  
+  /* Footer */
+  .footer {
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #6b7280;
+    border-top: 1px solid #f3f4f6;
+  }
+  
+  .footer-link {
+    color: #ec4899;
+  }
+  
+  .footer-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Animations */
+  @keyframes blob {
+    0% {
+      transform: translate(0, 0) scale(1);
+    }
+    100% {
+      transform: translate(20px, -20px) scale(1.1);
+    }
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes successCheck {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
