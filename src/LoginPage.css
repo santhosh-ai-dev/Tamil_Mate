@@ -1,0 +1,231 @@
+/* LoginPage.css */
+
+/* Layout Containers */
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.login-card {
+  background-color: white;
+  width: 100%;
+  max-width: 28rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  padding: 1.5rem;
+}
+
+/* Header and Icon */
+.icon-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.icon-wrapper {
+  background-color: #dbeafe;
+  padding: 0.75rem;
+  border-radius: 9999px;
+}
+
+.icon {
+  height: 1.5rem;
+  width: 1.5rem;
+  color: #2563eb;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  text-align: center;
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+}
+
+/* Form Elements */
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.phone-input-container {
+  position: relative;
+}
+
+.country-code {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 0.75rem;
+  color: #6b7280;
+}
+
+.phone-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+}
+
+.phone-input:focus, .otp-input:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+/* OTP Input */
+.otp-container {
+  margin-bottom: 1.5rem;
+}
+
+.otp-inputs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.otp-input {
+  width: 100%;
+  height: 3.5rem;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+}
+
+/* Buttons */
+.submit-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 500;
+  background-color: #2563eb;
+  transition: background-color 0.2s;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.submit-button:hover {
+  background-color: #1d4ed8;
+}
+
+.button-disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.button-icon {
+  margin-left: 0.5rem;
+  height: 1rem;
+  width: 1rem;
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  height: 1.25rem;
+  width: 1.25rem;
+  color: white;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-track {
+  opacity: 0.25;
+}
+
+.spinner-path {
+  opacity: 0.75;
+}
+
+/* Action Links */
+.action-links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text-link {
+  font-size: 0.875rem;
+  color: #4b5563;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.text-link:hover {
+  color: #1f2937;
+}
+
+.text-link.primary {
+  color: #2563eb;
+}
+
+.text-link.primary:hover {
+  color: #1d4ed8;
+}
+
+/* Terms Section */
+.terms-section {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.terms-link {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.terms-link:hover {
+  color: #1d4ed8;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .login-card {
+    padding: 1.25rem;
+  }
+  
+  .otp-input {
+    height: 3rem;
+  }
+}

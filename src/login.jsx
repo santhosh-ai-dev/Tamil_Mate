@@ -1,305 +1,199 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Phone, Lock, ArrowLeft, Heart, Check, X } from 'lucide-react';
-import './login.css'; // Import the separated CSS file
+import { useState } from 'react';
+import { Phone, ArrowRight, Lock, ShieldCheck } from 'lucide-react';
+import './LoginPage.css';
 
-const LoginPage = () => {
-  // States
-  const [currentStep, setCurrentStep] = useState('phone'); // 'phone' or 'otp'
+export default function MobileOTPLogin() {
+  const [step, setStep] = useState('phone'); // 'phone' or 'otp'
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [isPhoneValid, setIsPhoneValid] = useState(true);
-  const [otpValues, setOtpValues] = useState(['', '', '', '']);
-  const [isOtpValid, setIsOtpValid] = useState(true);
+  const [otp, setOtp] = useState(['', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
-  const [countdown, setCountdown] = useState(0);
-  const [showSuccess, setShowSuccess] = useState(false);
-  
-  // Refs for OTP inputs
-  const otpRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-  
-  // Handle phone number change
-  const handlePhoneChange = (e) => {
-    const value = e.target.value;
-    setPhoneNumber(value);
-    setIsPhoneValid(true);
-  };
-  
-  // Handle send OTP button click
-  const handleSendOtp = () => {
-    // Simple validation - you can enhance this
-    if (!phoneNumber || phoneNumber.length < 10) {
-      setIsPhoneValid(false);
-      return;
-    }
-    
+
+  const handlePhoneSubmit = (e) => {
+    e.preventDefault();
     setIsLoading(true);
     
     // Simulate API call to send OTP
     setTimeout(() => {
       setIsLoading(false);
-      setCurrentStep('otp');
-      setCountdown(30);
+      setStep('otp');
     }, 1500);
   };
-  
-  // Handle OTP input change
+
   const handleOtpChange = (index, value) => {
-    // Allow only numbers
-    if (!/^\d*$/.test(value)) return;
+    // Only allow digits
+    if (value && !/^\d*$/.test(value)) return;
     
-    const newOtpValues = [...otpValues];
-    newOtpValues[index] = value;
-    setOtpValues(newOtpValues);
-    setIsOtpValid(true);
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
     
     // Auto-focus next input
-    if (value !== '' && index < otpRefs.length - 1) {
-      otpRefs[index + 1].current.focus();
+    if (value && index < 3) {
+      const nextInput = document.getElementById(`otp-${index + 1}`);
+      if (nextInput) nextInput.focus();
     }
   };
-  
-  // Handle keydown for backspace in OTP inputs
-  const handleOtpKeyDown = (index, e) => {
-    if (e.key === 'Backspace' && otpValues[index] === '' && index > 0) {
-      otpRefs[index - 1].current.focus();
+
+  const handleKeyDown = (index, e) => {
+    // Handle backspace to move to previous input
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      const prevInput = document.getElementById(`otp-${index - 1}`);
+      if (prevInput) prevInput.focus();
     }
   };
-  
-  // Handle verify OTP button click
-  const handleVerifyOtp = () => {
-    // Check if OTP is complete
-    if (otpValues.some(val => val === '')) {
-      setIsOtpValid(false);
-      return;
-    }
-    
+
+  const handleOtpSubmit = (e) => {
+    e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API verification
+    // Simulate API call to verify OTP
     setTimeout(() => {
       setIsLoading(false);
-      // Show success animation
-      setShowSuccess(true);
-      
-      // Redirect to app after success
-      setTimeout(() => {
-        alert('Login successful! Redirecting to app...');
-        // In a real app, you would navigate to the main app screen here
-      }, 1500);
-    }, 2000);
+      alert('Login successful!');
+    }, 1500);
   };
-  
-  // Resend OTP functionality
-  const handleResendOtp = () => {
-    if (countdown > 0) return;
-    
+
+  const handleResendOTP = () => {
     setIsLoading(true);
     
     // Simulate API call to resend OTP
     setTimeout(() => {
       setIsLoading(false);
-      setCountdown(30);
-      // Clear OTP fields
-      setOtpValues(['', '', '', '']);
-      otpRefs[0].current.focus();
-    }, 1500);
-  };
-  
-  // Countdown effect for resend OTP
-  useEffect(() => {
-    if (countdown <= 0) return;
-    
-    const timer = setInterval(() => {
-      setCountdown(prev => prev - 1);
+      alert('New OTP sent!');
     }, 1000);
-    
-    return () => clearInterval(timer);
-  }, [countdown]);
-  
-  // Focus first OTP input when switching to OTP step
-  useEffect(() => {
-    if (currentStep === 'otp') {
-      otpRefs[0].current?.focus();
-    }
-  }, [currentStep]);
-  
+  };
+
   return (
     <div className="login-container">
-      <div className="overlay"></div>
-      
-      {/* Animated background elements */}
-      <div className="bg-elements">
-        <div className="blob"></div>
-        <div className="blob"></div>
-        <div className="blob"></div>
-      </div>
-      
-      <div className={`login-card ${showSuccess ? 'success' : ''}`}>
-        
-        {/* Success animation overlay */}
-        {showSuccess && (
-          <div className="success-overlay">
-            <div className="success-content">
-              <div className="success-check-container">
-                <Check size={50} className="success-check" strokeWidth={3} />
-              </div>
-              <h2 className="success-title">Login Successful!</h2>
-              <p className="success-message">Redirecting you to the app...</p>
-              <div className="success-indicator"></div>
-            </div>
+      <div className="login-card">
+        <div className="icon-container">
+          <div className="icon-wrapper">
+            {step === 'phone' ? (
+              <Phone className="icon" />
+            ) : (
+              <Lock className="icon" />
+            )}
           </div>
+        </div>
+        
+        <h2 className="page-title">
+          {step === 'phone' ? 'Login with Mobile' : 'Verify OTP'}
+        </h2>
+        
+        <p className="page-subtitle">
+          {step === 'phone' 
+            ? 'Enter your mobile number to continue' 
+            : `We've sent a verification code to ${phoneNumber}`}
+        </p>
+        
+        {step === 'phone' ? (
+          <form onSubmit={handlePhoneSubmit}>
+            <div className="input-group">
+              <label htmlFor="phone" className="input-label">
+                Mobile Number
+              </label>
+              <div className="phone-input-container">
+                <div className="country-code">
+                  <span>+91</span>
+                </div>
+                <input
+                  type="tel"
+                  id="phone"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                  placeholder="Enter 10 digit number"
+                  className="phone-input"
+                  required
+                  maxLength={10}
+                  pattern="[0-9]{10}"
+                />
+              </div>
+            </div>
+            
+            <button
+              type="submit"
+              disabled={phoneNumber.length !== 10 || isLoading}
+              className={`submit-button ${phoneNumber.length !== 10 || isLoading ? 'button-disabled' : ''}`}
+            >
+              {isLoading ? (
+                <svg className="loading-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="spinner-track" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="spinner-path" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              ) : (
+                <>
+                  Continue <ArrowRight className="button-icon" />
+                </>
+              )}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleOtpSubmit}>
+            <div className="otp-container">
+              <label htmlFor="otp-0" className="input-label">
+                Enter Verification Code
+              </label>
+              <div className="otp-inputs">
+                {otp.map((digit, index) => (
+                  <input
+                    key={index}
+                    id={`otp-${index}`}
+                    type="text"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleOtpChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    className="otp-input"
+                    required
+                  />
+                ))}
+              </div>
+            </div>
+            
+            <button
+              type="submit"
+              disabled={otp.join('').length !== 4 || isLoading}
+              className={`submit-button ${otp.join('').length !== 4 || isLoading ? 'button-disabled' : ''}`}
+            >
+              {isLoading ? (
+                <svg className="loading-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="spinner-track" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="spinner-path" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              ) : (
+                <>
+                  Verify OTP <ShieldCheck className="button-icon" />
+                </>
+              )}
+            </button>
+            
+            <div className="action-links">
+              <button 
+                type="button" 
+                onClick={() => setStep('phone')}
+                className="text-link"
+              >
+                Change Number
+              </button>
+              <button 
+                type="button" 
+                onClick={handleResendOTP}
+                disabled={isLoading}
+                className="text-link primary"
+              >
+                Resend OTP
+              </button>
+            </div>
+          </form>
         )}
         
-        {/* Header */}
-        <div className="header">
-          <div className="header-bg">
-            <div className="header-blob-1"></div>
-            <div className="header-blob-2"></div>
-          </div>
-          
-          <div className="logo-container">
-            <Heart size={36} className="logo-icon" fill="currentColor" />
-          </div>
-          <h1 className="header-title">Find Your Perfect Match</h1>
-          <p className="header-subtitle">Login to start your journey</p>
-          
-          <div className="header-wave">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-              <path fill="#ffffff" fillOpacity="0.9" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-            </svg>
-          </div>
-        </div>
-        
-        {/* Form content */}
-        <div className="form-container">
-          {currentStep === 'phone' ? (
-            /* Phone Number Step */
-            <div className="form-group">
-              <div>
-                <label className="input-label">Mobile Number</label>
-                <div className={`input-container ${!isPhoneValid ? 'error' : ''}`}>
-                  <Phone size={20} className={`input-icon ${!isPhoneValid ? 'error' : ''}`} />
-                  <input
-                    type="tel"
-                    value={phoneNumber}
-                    onChange={handlePhoneChange}
-                    placeholder="Enter your mobile number"
-                    className={`input-field ${!isPhoneValid ? 'error' : ''}`}
-                    maxLength={15}
-                  />
-                </div>
-                {!isPhoneValid && (
-                  <p className="error-message">
-                    <X size={14} className="error-icon" /> Please enter a valid mobile number
-                  </p>
-                )}
-              </div>
-              
-              <button
-                onClick={handleSendOtp}
-                disabled={isLoading}
-                className="submit-button"
-              >
-                {isLoading ? (
-                  <div className="button-content">
-                    <div className="spinner"></div>
-                    Sending OTP...
-                  </div>
-                ) : (
-                  'Send OTP'
-                )}
-              </button>
-              
-              <div className="signup-container">
-                <p className="signup-text">
-                  New to our dating app?{' '}
-                  <a href="#" className="signup-link">Sign up</a>
-                </p>
-              </div>
-            </div>
-          ) : (
-            /* OTP Verification Step */
-            <div>
-              <button 
-                onClick={() => setCurrentStep('phone')}
-                className="back-button"
-              >
-                <ArrowLeft size={18} className="back-icon" />
-                Back to phone number
-              </button>
-              
-              <div>
-                <div className="otp-header">
-                  <label className="otp-label">Enter Verification Code</label>
-                  <span className="otp-phone-badge">Sent to {phoneNumber}</span>
-                </div>
-                
-                <div className="otp-info">
-                  <Lock size={18} className="otp-info-icon" />
-                  <span className="otp-info-text">Enter the 4-digit code sent to your phone</span>
-                </div>
-                
-                <div className="otp-inputs">
-                  {otpValues.map((value, index) => (
-                    <input
-                      key={index}
-                      ref={otpRefs[index]}
-                      type="text"
-                      maxLength={1}
-                      value={value}
-                      onChange={(e) => handleOtpChange(index, e.target.value)}
-                      onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                      className={`otp-input ${
-                        !isOtpValid ? 'error' : value ? 'filled' : ''
-                      }`}
-                    />
-                  ))}
-                </div>
-                
-                {!isOtpValid && (
-                  <p className="error-message" style={{justifyContent: 'center'}}>
-                    <X size={14} className="error-icon" /> Please enter a valid OTP code
-                  </p>
-                )}
-              </div>
-              
-              <button
-                onClick={handleVerifyOtp}
-                disabled={isLoading}
-                className="submit-button verify-button"
-                style={{marginTop: '1rem'}}
-              >
-                {isLoading ? (
-                  <div className="button-content">
-                    <div className="spinner"></div>
-                    Verifying...
-                  </div>
-                ) : (
-                  'Verify & Login'
-                )}
-              </button>
-              
-              <div className="signup-container">
-                <button
-                  onClick={handleResendOtp}
-                  disabled={countdown > 0}
-                  className="resend-button"
-                >
-                  {countdown > 0
-                    ? `Resend OTP in ${countdown}s`
-                    : 'Didn\'t receive the code? Resend'}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-        
-        {/* Footer */}
-        <div className="footer">
-          By continuing, you agree to our <a href="#" className="footer-link">Terms</a> & <a href="#" className="footer-link">Privacy Policy</a>
+        <div className="terms-section">
+          By continuing, you agree to our
+          <a href="#" className="terms-link"> Terms of Service </a>
+          and
+          <a href="#" className="terms-link"> Privacy Policy</a>
         </div>
       </div>
     </div>
   );
-};
-
-export default LoginPage;
+}

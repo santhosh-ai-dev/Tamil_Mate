@@ -1,238 +1,217 @@
 import { useState } from 'react';
-import { Check, Calendar, X } from 'lucide-react';
-import './ProfileSetupForm.css';
+import { Calendar, Gift, ChevronDown, User, Check } from 'lucide-react';
+import './SetProfile.css';
 
-export default function ProfileSetupForm() {
-  const [nickname, setNickname] = useState('');
-  const [isNicknameValid, setIsNicknameValid] = useState(false);
-  const [showGenderSelect, setShowGenderSelect] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [birthDate, setBirthDate] = useState('');
+export default function SetProfile() {
+  const [name, setName] = useState('');
   const [gender, setGender] = useState('');
-  
-  const handleNicknameChange = (e) => {
-    const value = e.target.value;
-    setNickname(value);
-    setIsNicknameValid(value.length >= 3);
-  };
-  
-  const handleWhoAreYouClick = () => {
-    setShowGenderSelect(true);
-  };
-  
-  const handleGenderSelect = (selectedGender) => {
-    setGender(selectedGender);
-    setShowGenderSelect(false);
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [referralCode, setReferralCode] = useState('');
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you would typically send the data to your backend
+    console.log({ name, gender, dateOfBirth, referralCode });
+    setFormSubmitted(true);
+    // After submission, you might redirect to another page
+    setTimeout(() => {
+      alert('Profile set successfully!');
+    }, 1000);
   };
 
-  const toggleCalendar = () => {
-    setShowCalendar(!showCalendar);
-  };
-
-  const handleDateSelect = (date) => {
-    setBirthDate(date);
-    setShowCalendar(false);
-  };
-
-  // Simple calendar component
-  const DatePicker = () => {
-    const today = new Date();
-    const [viewDate, setViewDate] = useState(today);
-    const [, setSelectedDate] = useState(null);
-    
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    
-    const getDaysInMonth = (year, month) => {
-      return new Date(year, month + 1, 0).getDate();
-    };
-    
-    const getFirstDayOfMonth = (year, month) => {
-      return new Date(year, month, 1).getDay();
-    };
-    
-    const handlePrevMonth = () => {
-      setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1));
-    };
-    
-    const handleNextMonth = () => {
-      setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1));
-    };
-    
-    const handleSelectDate = (day) => {
-      const date = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-      setSelectedDate(date);
-      const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-      handleDateSelect(formattedDate);
-    };
-    
-    const renderCalendarDays = () => {
-      const days = [];
-      const daysInMonth = getDaysInMonth(viewDate.getFullYear(), viewDate.getMonth());
-      const firstDay = getFirstDayOfMonth(viewDate.getFullYear(), viewDate.getMonth());
-      
-      // Add empty cells for days before the first day of the month
-      for (let i = 0; i < firstDay; i++) {
-        days.push(<div key={`empty-${i}`} className="calendar-day-empty"></div>);
-      }
-      
-      // Add days of the month
-      for (let day = 1; day <= daysInMonth; day++) {
-        days.push(
-          <div 
-            key={`day-${day}`}
-            onClick={() => handleSelectDate(day)}
-            className="calendar-day"
-          >
-            {day}
-          </div>
-        );
-      }
-      
-      return days;
-    };
-    
-    return (
-      <div className="calendar-container">
-        <div className="calendar-header">
-          <button onClick={handlePrevMonth} className="calendar-nav-button">
-            &lt;
-          </button>
-          <div>
-            {months[viewDate.getMonth()]} {viewDate.getFullYear()}
-          </div>
-          <button onClick={handleNextMonth} className="calendar-nav-button">
-            &gt;
-          </button>
-        </div>
-        
-        <div className="calendar-grid">
-          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
-            <div key={index} className="calendar-weekday">
-              {day}
-            </div>
-          ))}
-          {renderCalendarDays()}
-        </div>
-      </div>
-    );
-  };
+  // Generate an array of years for the calendar
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
   
+  // Generate months array
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  // Generate an array of days (1-31)
+  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+
+  const [selectedDay, setSelectedDay] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+
+  const handleDateSelection = () => {
+    if (selectedDay && selectedMonth && selectedYear) {
+      const formattedDate = `${selectedDay} ${selectedMonth} ${selectedYear}`;
+      setDateOfBirth(formattedDate);
+      setCalendarOpen(false);
+    }
+  };
+
   return (
-    <div className="profile-setup-container">
-      <h1 className="profile-setup-title">Set Profile</h1>
-      
-      <div className="form-container">
-        {/* Nickname field */}
-        <div className="form-field-container">
-          <div className={`input-field ${isNicknameValid ? 'valid' : ''}`}>
-            <input
-              type="text"
-              placeholder="Nick-name"
-              value={nickname}
-              onChange={handleNicknameChange}
-              className="input-control"
-            />
-            {isNicknameValid && (
-              <Check className="valid-icon" size={24} />
+    <div className="profile-container">
+      <div className="profile-card">
+        <h1 className="profile-title">Set Up Your Profile</h1>
+        <p className="profile-subtitle">Please provide your details to continue</p>
+
+        <form onSubmit={handleSubmit} className="profile-form">
+          {/* Name Input */}
+          <div className="form-group">
+            <label htmlFor="name" className="form-label">
+              Your Name
+            </label>
+            <div className="input-container">
+              <User className="input-icon" />
+              <input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your full name"
+                className="form-input"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Gender Selection */}
+          <div className="form-group">
+            <label className="form-label">Who are you?</label>
+            <div className="gender-container">
+              <button
+                type="button"
+                className={`gender-option ${gender === 'male' ? 'selected' : ''}`}
+                onClick={() => setGender('male')}
+              >
+                <div className="gender-image-container">
+                  <img src="/api/placeholder/120/120" alt="Male" className="gender-image" />
+                  {gender === 'male' && <div className="gender-check"><Check /></div>}
+                </div>
+                <span className="gender-label">Boy</span>
+              </button>
+
+              <button
+                type="button"
+                className={`gender-option ${gender === 'female' ? 'selected' : ''}`}
+                onClick={() => setGender('female')}
+              >
+                <div className="gender-image-container">
+                  <img src="/api/placeholder/120/120" alt="Female" className="gender-image" />
+                  {gender === 'female' && <div className="gender-check"><Check /></div>}
+                </div>
+                <span className="gender-label">Girl</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Date of Birth Input */}
+          <div className="form-group">
+            <label htmlFor="dob" className="form-label">
+              Date of Birth
+            </label>
+            <div className="input-container">
+              <Calendar className="input-icon" />
+              <input
+                type="text"
+                id="dob"
+                value={dateOfBirth}
+                readOnly
+                placeholder="Select your date of birth"
+                className="form-input"
+                onClick={() => setCalendarOpen(!calendarOpen)}
+                required
+              />
+              <button
+                type="button"
+                className="calendar-toggle"
+                onClick={() => setCalendarOpen(!calendarOpen)}
+              >
+                <ChevronDown className="toggle-icon" />
+              </button>
+            </div>
+
+            {calendarOpen && (
+              <div className="calendar-dropdown">
+                <div className="calendar-selects">
+                  <div className="calendar-select-container">
+                    <label className="calendar-label">Day</label>
+                    <select 
+                      value={selectedDay} 
+                      onChange={(e) => setSelectedDay(e.target.value)}
+                      className="calendar-select"
+                    >
+                      <option value="">Day</option>
+                      {days.map(day => (
+                        <option key={day} value={day}>{day}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="calendar-select-container">
+                    <label className="calendar-label">Month</label>
+                    <select 
+                      value={selectedMonth} 
+                      onChange={(e) => setSelectedMonth(e.target.value)}
+                      className="calendar-select"
+                    >
+                      <option value="">Month</option>
+                      {months.map(month => (
+                        <option key={month} value={month}>{month}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="calendar-select-container">
+                    <label className="calendar-label">Year</label>
+                    <select 
+                      value={selectedYear} 
+                      onChange={(e) => setSelectedYear(e.target.value)}
+                      className="calendar-select"
+                    >
+                      <option value="">Year</option>
+                      {years.map(year => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <button 
+                  type="button" 
+                  className="calendar-apply-btn"
+                  onClick={handleDateSelection}
+                >
+                  Apply
+                </button>
+              </div>
             )}
           </div>
-          {isNicknameValid && (
-            <p className="valid-text">Perfect!</p>
-          )}
-        </div>
-        
-        {/* Who are you dropdown */}
-        <div 
-          onClick={handleWhoAreYouClick}
-          className="select-field"
-        >
-          <span className={gender ? "selected-text" : "placeholder-text"}>
-            {gender === 'girl' ? 'Girl' : gender === 'boy' ? 'Boy' : 'Who are you?'}
-          </span>
-          <span className="select-action-text">
-            {gender ? 'Change' : 'Select'}
-          </span>
-        </div>
-        
-        {/* Date of Birth field */}
-        <div className="form-field-container">
-          <div 
-            className="select-field"
-            onClick={toggleCalendar}
+
+          {/* Referral Code Input */}
+          <div className="form-group">
+            <label htmlFor="referral" className="form-label">
+              Referral Code (Optional)
+            </label>
+            <div className="input-container">
+              <Gift className="input-icon" />
+              <input
+                type="text"
+                id="referral"
+                value={referralCode}
+                onChange={(e) => setReferralCode(e.target.value)}
+                placeholder="Enter referral code if you have one"
+                className="form-input"
+              />
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <button 
+            type="submit" 
+            className="submit-button"
+            disabled={!name || !gender || !dateOfBirth || formSubmitted}
           >
-            <span className={birthDate ? "selected-text" : "placeholder-text"}>
-              {birthDate || "Date of Birth"}
-            </span>
-            <div className="calendar-icon-container">
-              <Calendar size={20} className="calendar-icon" />
-            </div>
-          </div>
-          
-          {showCalendar && (
-            <div className="calendar-dropdown">
-              <DatePicker />
-            </div>
-          )}
-        </div>
-        
-        {/* Referral code option */}
-        <p className="referral-code-text">I have referral code</p>
-        
-        {/* Submit button */}
-        <div className="submit-container">
-          <button className="submit-button">
-            Submit
+            {formSubmitted ? 'Setting up profile...' : 'Continue'}
           </button>
-          
-          <p className="terms-text">
-            By proceeding I accept the <span className="terms-bold">Community Guidelines, Terms of use</span>
-          </p>
-        </div>
+        </form>
       </div>
-      
-      {/* Gender selection modal */}
-      {showGenderSelect && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <div className="modal-header">
-              <h2 className="modal-title">Select your true gender</h2>
-              <p className="modal-subtitle">
-                Wrong Gender = Life Ban <X className="ban-icon" size={18} />
-              </p>
-            </div>
-            
-            <div className="gender-options">
-              <div 
-                onClick={() => handleGenderSelect('girl')}
-                className="gender-option female"
-              >
-                {/* Female silhouette */}
-                <div className="gender-icon-container">
-                  <svg viewBox="0 0 100 100" className="gender-icon female-icon">
-                    <path d="M50,20 C60,20 70,30 70,45 C70,55 65,65 50,65 C35,65 30,55 30,45 C30,30 40,20 50,20 Z" fill="#FFF" />
-                    <path d="M35,62 L35,85 L45,85 L45,70 L55,70 L55,85 L65,85 L65,62 C65,62 60,70 50,70 C40,70 35,62 35,62 Z" fill="#FFF" />
-                  </svg>
-                </div>
-                <p className="gender-label female-label">I am Girl</p>
-              </div>
-              
-              <div 
-                onClick={() => handleGenderSelect('boy')}
-                className="gender-option male"
-              >
-                {/* Male silhouette */}
-                <div className="gender-icon-container">
-                  <svg viewBox="0 0 100 100" className="gender-icon male-icon">
-                    <path d="M50,20 C60,20 70,30 70,45 C70,55 65,65 50,65 C35,65 30,55 30,45 C30,30 40,20 50,20 Z" fill="#FFF" />
-                    <path d="M42,65 L42,85 L58,85 L58,65 C58,65 55,70 50,70 C45,70 42,65 42,65 Z" fill="#FFF" />
-                  </svg>
-                </div>
-                <p className="gender-label male-label">I am Boy</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
